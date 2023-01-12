@@ -87,14 +87,38 @@ const DOM = {
 
 DOM.form.addEventListener('submit', sendMessage);
 
-var count =0;
+var messages = 0;
+var count = 0;
+
+
+
+if (sessionStorage.getItem('count', 3)) {  
+  localStorage.setItem('count', count)
+  document.getElementById("bodyy").style.visibility = "hidden";
+  document.getElementById("teXT").style.visibility = "visible";
+  console.log("banning...")
+  delay(10000)
+  sessionStorage.setItem('count', 0)
+  count = 0;
+
+  
+  DOM.input.value = '';
+  drone.publish({
+    room: 'observable-room',
+    message: "Sweared Too Much..."
+  });
+  
+ }
+
 
 function sendMessage() {
   const value = DOM.input.value;
   if (value === '') {
+    messages = messages + 1;
+    sessionStorage.setItem("messages-sent", messages)
     return;
   }
-  if (value === "fuck") {
+  if (value === "fu") {
     DOM.input.value = '';
     drone.publish({
       room: 'observable-room',
@@ -102,22 +126,27 @@ function sendMessage() {
     });
    count = count + 1;
    console.log(count);
-
-   if (count >= 3) {  
+   sessionStorage.setItem('count', count)
+   
+   if (count == 3) {  
+    localStorage.setItem('count', count)
+    document.getElementById("bodyy").style.visibility = "hidden";
+    document.getElementById("teXT").style.visibility = "visible";
+    console.log("banning...")
+    
     DOM.input.value = '';
     drone.publish({
       room: 'observable-room',
       message: "Sweared Too Much..."
     });
-    
+    return
    }
-
-   return;
+return
    
   }
 
 
-  if (value === "shit") {
+  if (value === "s") {
     DOM.input.value = '';
     drone.publish({
       room: 'observable-room',
@@ -125,11 +154,14 @@ function sendMessage() {
     });
    count = count + 1;
    console.log(count);
+   sessionStorage.setItem('count', count)
    
-   if (count === 3) {  
+   if (count == 3) {  
+    localStorage.setItem('count', count)
     document.getElementById("bodyy").style.visibility = "hidden";
     document.getElementById("teXT").style.visibility = "visible";
     console.log("banning...")
+    
     DOM.input.value = '';
     drone.publish({
       room: 'observable-room',
